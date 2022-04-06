@@ -1,0 +1,1 @@
+double** create_empty_matrix(int rows, int cols);
