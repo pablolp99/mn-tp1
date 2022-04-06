@@ -32,7 +32,9 @@ double** calculate_coefficient_matrix(double r, double delta_r, double delta_the
             v[i][(j+1) % n] = tmp;
             // Reshape v to be a vector
 
-            // Make M[i] = reshaped(v)
+            // Make M[i*n + j] = reshaped(v)
+
+            delete v;
         }
     }
 
