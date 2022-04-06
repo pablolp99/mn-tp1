@@ -1,7 +1,8 @@
+#include <math.h>
 #include "matrix.hpp"
 #include "furnace.hpp"
 
-double** create_empty_matrix(int rows, int cols){
+double** create_2d_array(int rows, int cols){
     double** M = 0;
     M = new double*[rows];
 
@@ -15,14 +16,18 @@ double** create_empty_matrix(int rows, int cols){
     return M;
 }
 
-double** calculate_coefficient_matrix(double r, double delta_r, double delta_theta, int m_1, int n){
+double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n){
     int size = m_1 * n;
-    double** M = create_empty_matrix(size, size);
+    double delta_r = (r_e - r_i) / m_1;
+    double delta_theta = 2 * M_PI / n;
+
+    double** M = create_2d_array(size, size);
 
     // El for que esta en python
     for (int i = 1; i < m_1-1; ++i){
         for (int j = 0; j < n; ++j){
-            double** v = create_empty_matrix(m_1, n);
+            double r = r_i + (r_e - r_i) / (m_1 - 1);
+            double** v = create_2d_array(m_1, n);
 
             v[i-1][j] = calculate_t_jp_k(delta_r, r);
             v[i][j] = calculate_t_ja_k(delta_r, r, delta_theta);
@@ -31,12 +36,26 @@ double** calculate_coefficient_matrix(double r, double delta_r, double delta_the
             v[i][j-1] = tmp;
             v[i][(j+1) % n] = tmp;
             // Reshape v to be a vector
-
-            // Make M[i*n + j] = reshaped(v)
-
-            delete v;
+            double* reshaped_v = reshape_1d_array(v, size, m_1, n);
+            // Make M[i*n + j] = reshaped_v
+            M[i*n + j] = reshaped_v;
+            // Habra que deletear los arrays?
+            // delete reshaped_v;
+            // delete v;
         }
     }
 
     return M;
+}
+
+double* reshape_1d_array(double** v, int size, int m, int n){
+    double* reshaped;
+    reshaped = new double[size];
+
+    for (int i = 1; i < n; ++i){
+        for (int j = 0; j < m; ++j){
+            reshaped[i*n+j] = v[i][j];
+        }
+    }
+    return reshaped;
 }
