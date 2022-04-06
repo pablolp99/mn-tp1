@@ -167,3 +167,5 @@ dmypy.json
 
 # Custom rules
 *.DS_Store
+.idea/
+cmake-build-debug/

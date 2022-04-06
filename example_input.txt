@@ -1,0 +1,6 @@
+Ejemplo de input
+
+r_i r_e m+1 n iso ninst
+# Luego tendra ninst lineas, cada una con 2n valores
+# Los primeros n indicando el calor de la temperatura interna
+# Los ultimos n indican los valores de la pared externa
