@@ -1,3 +1,4 @@
+#include <bits/stdc++.h>
 #include <math.h>
 #include "matrix.hpp"
 #include "furnace.hpp"
@@ -74,4 +75,25 @@ double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, dou
     }
 
     return b;
+}
+
+double* gaussian_elimination_step(double** A, int i, int n){
+    // Vector de coeficientes (para posterior uso con la L)
+    double* coefs = new double[n];
+    // Seteamos todos los valores iniciales en 0
+    memset(coefs, 0, sizeof(coefs));
+    for (int j = i+1; j < n; ++j) {
+        // De coefs[0] a coefs[j-1] quedan con 0's
+        coefs[j] = A[j][i] / A[i][i];
+        for (int k = i; k < n; ++k) {
+            A[j][k] = A[j][k] - coefs[j] * A[i][k];
+        }
+    }
+    return coefs;
+}
+
+void gaussian_elimination(double** A, int n){
+    for (int i = 0; i < n; ++i){
+        gaussian_elimination_step(A, i, n);
+    }
 }
