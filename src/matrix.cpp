@@ -24,8 +24,6 @@ double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n){
     double** M = create_2d_array(size, size);
 
     // El for que esta en python
-    // 5 6 5 4 500 1
-    int total = 0;
     for (int i = 1; i < m_1-1; ++i){
         for (int j = 0; j < n; ++j){
             double** v = create_2d_array(m_1, n);
@@ -48,7 +46,6 @@ double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n){
             // Habra que deletear los arrays?
             // delete reshaped_v;
             // delete v;
-            total += 1;
         }
     }
 
@@ -64,4 +61,17 @@ double* reshape_1d_array(double** v, int size, int m, int n){
         }
     }
     return reshaped;
+}
+
+double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, double r_e, int n, int m){
+    int size = (n - 1) * (m - 1);
+    double* b = new double[size];
+    double delta_r = (r_e - r_i) / m;
+
+    for (int i = 0; i < n; ++i){
+        b[i] = -A[n][0] * t_i[i];
+        b[(size-1) - i] = -calculate_t_jn_k(delta_r) * t_e[(n-1) - i];
+    }
+
+    return b;
 }
