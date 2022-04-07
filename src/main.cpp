@@ -31,7 +31,10 @@ int main(){
     // Calculate b vector
     double* b = calculate_b_vector(t_i, t_e, A, r_i, r_e, n, m_1);
     // Triangulate
+    print_matrix(A, 12, 12);
     gaussian_elimination(A, 12);
+    printf("\n");
+    print_matrix(A, 12, 12);
     // Return x
     printf("Here\n");
 

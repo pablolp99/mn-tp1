@@ -3,6 +3,16 @@
 #include "matrix.hpp"
 #include "furnace.hpp"
 
+void print_matrix(double** A, int n, int m){
+    for (int i = 0; i < n; ++i){
+        for (int j = 0; j < m; ++j){
+            printf("%f ", A[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 double** create_2d_array(int rows, int cols){
     double** M = 0;
     M = new double*[rows];
@@ -50,7 +60,14 @@ double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n){
         }
     }
 
-    return M;
+    double** M_r = create_2d_array(size - 2 * n, size - 2 * n);
+    for (int i = n; i < (m_1 - 1) * n; ++i){
+        for (int j = n; j < (m_1 - 1) * n; ++j){
+            M_r[i - n][j - n] = M[i][j];
+        }
+    }
+
+    return M_r;
 }
 
 double* reshape_1d_array(double** v, int size, int m, int n){
