@@ -10,8 +10,6 @@ int main(){
 
     cin >> r_i >> r_e >> m_1 >> n >> iso >> n_inst;
     // The first approach is to use just one instance
-
-
     double** A = calculate_coefficient_matrix(r_i, r_e, m_1, n);
     // Calculate b vector
     // Triangulate
