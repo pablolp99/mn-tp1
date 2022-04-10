@@ -27,16 +27,23 @@ int main(){
     }
 
     // The first approach is to use just one instance
-    double** A = calculate_coefficient_matrix(r_i, r_e, m_1, n);
+    double** U = calculate_coefficient_matrix(r_i, r_e, m_1, n);
     // Calculate b vector
-    double* b = calculate_b_vector(t_i, t_e, A, r_i, r_e, n, m_1);
+    double* b = calculate_b_vector(t_i, t_e, U, r_i, r_e, n, m_1);
+
+    int cantTemperatures = n*(m_1-2);
+
     // Triangulate
-    print_matrix(A, 12, 12);
-    gaussian_elimination(A, 12);
+    gaussian_elimination(U, b, cantTemperatures);
+
+    //double** L = LU_factorization(U, b, 12);
+
     printf("\n");
-    print_matrix(A, 12, 12);
-    // Return x
-    printf("Here\n");
+
+    //print_matrix(U, 12, 12);
+    //print_matrix(L, 12, 12);
+
+    print_vector(upper_triangular_system_solver(U, b, cantTemperatures), cantTemperatures);
 
     return 0;
 }

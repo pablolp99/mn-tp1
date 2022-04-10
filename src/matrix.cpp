@@ -1,5 +1,6 @@
-#include <bits/stdc++.h>
 #include <math.h>
+#include <cstring>
+#include <cstdio>
 #include "matrix.hpp"
 #include "furnace.hpp"
 
@@ -8,6 +9,14 @@ void print_matrix(double** A, int n, int m){
         for (int j = 0; j < m; ++j){
             printf("%f ", A[i][j]);
         }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+void print_vector(double* v, int n){
+    for (int i = 0; i < n; ++i){
+        printf("%f ", v[i]);
         printf("\n");
     }
     printf("\n");
@@ -94,9 +103,11 @@ double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, dou
     return b;
 }
 
-double* gaussian_elimination_step(double** A, int i, int n){
+// Este metodo realiza una iteracion de la triangulacion (La iteracion i que pone en cero los elementos de la columna
+// i desde la fila i+1 y actualiza el resto)
+double* gaussian_elimination_step(double** A, double* b, int i, int n){
     // Vector de coeficientes (para posterior uso con la L)
-    double* coefs = new double[n];
+    auto* coefs = new double[n];
     // Seteamos todos los valores iniciales en 0
     memset(coefs, 0, sizeof(coefs));
     for (int j = i+1; j < n; ++j) {
@@ -105,12 +116,69 @@ double* gaussian_elimination_step(double** A, int i, int n){
         for (int k = i; k < n; ++k) {
             A[j][k] = A[j][k] - coefs[j] * A[i][k];
         }
+        b[j] = b[j] - coefs[j] * b[i];
     }
     return coefs;
 }
 
-void gaussian_elimination(double** A, int n){
+void gaussian_elimination(double** A, double* b, int n){
     for (int i = 0; i < n; ++i){
-        gaussian_elimination_step(A, i, n);
+        gaussian_elimination_step(A, b, i, n);
     }
+}
+
+double** LU_factorization(double** A, double* b, int n) {
+    double** L = create_2d_array(n, n);
+    double* coef;
+
+    for (int i = 0; i < n; ++i){
+        // Saves coeficients for L
+        coef = gaussian_elimination_step(A, b, i, n);
+        L[i][i] = 1;
+        for (int j = i+1; j < n; ++j) {
+            L[j][i] = coef[j];
+        }
+    }
+
+    return L;
+}
+
+double* upper_triangular_system_solver(double** A, const double* b, int n) {
+    auto* x = new double[n];
+
+    memset(x, 0, n);
+    for (int i = n-1; i >= 0; i--) {
+        // x_i = b_i
+        x[i] = b[i];
+        for (int j = n-1; j > i; j--) { // x_i = b_i - sum_{j=i+1}^{n} a_{i,j} x_j
+            x[i] = x[i] - A[i][j]*x[j];
+        }
+        // x_i = (b_i - sum_{j=i+1}^{n} a_{i,j} x_j) / a_{i,i}
+        x[i] = x[i] / A[i][i];
+    }
+    return x;
+}
+
+double* lower_triangular_system_solver(double** A, const double* b, int n) {
+    auto* x = new double[n];
+
+    memset(x, 0, n);
+    for (int i = 0; i < n; i++) {
+        // x_i = b_i
+        x[i] = b[i];
+        for (int j = 0; j < i; j++) {
+            x[i] = x[i] - A[i][j]*x[j];
+        }
+        // x_i = b_i - sum_{j=0}^{i} a_{i,j} x_j
+        x[i] = x[i] / A[i][i];
+        // x_i = (b_i - sum_{j=i+1}^{n} a_{i,j} x_j) / a_{i,i}
+    }
+
+    return x;
+}
+
+double* LU_resolver(double** L, double** U, double* b, int n) {
+    double* y = lower_triangular_system_solver(L, b, n);
+
+    return upper_triangular_system_solver(U, y, n);
 }
