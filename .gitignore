@@ -169,3 +169,8 @@ dmypy.json
 *.DS_Store
 .idea/
 cmake-build-debug/
+.vscode/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
