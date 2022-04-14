@@ -57,12 +57,14 @@ int main(int argc, char *argv[]){
     double** U = calculate_coefficient_matrix(r_i, r_e, m_1, n);
 
     for (int instace = 0; instace < n_inst; ++instace){
+        printf("Instance %d\n", instace);
         // Calculate b vector
         double* b = calculate_b_vector(t_i[instace], t_e[instace], A, r_i, r_e, n, m_1);
         // Read argv config
         // Triangulate
         double* x;
         int elimination = stoi(argv[3]);
+
         if (elimination == GAUSSIAN){
             gaussian_elimination(U, b, temperatures_amount);
             // Calculate vector X
@@ -70,7 +72,7 @@ int main(int argc, char *argv[]){
         } else if (elimination == LU){
             double** L = LU_factorization(U, b, 12);
             // Calculate vector X
-            x = LU_resolver(L, U, b, n);
+            x = LU_resolver(L, U, b, temperatures_amount);
         } else {
             printf("Elimination method not supported. Please choose 0 (Gaussian Elmination) or 1 (LU Factorization)\n");
             return 1;
