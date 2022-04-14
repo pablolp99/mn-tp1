@@ -3,7 +3,7 @@ void print_vector(double* v, int n);
 double** create_2d_array(int rows, int cols);
 double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n);
 double* reshape_1d_array(double** v, int size, int m, int n);
-double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, double r_e, int n, int m);
+double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, double r_e, int n, int m_1);
 double* gaussian_elimination_step(double** A, double* b, int i, int n);
 void gaussian_elimination(double** A, double* b, int n);
 double** LU_factorization(double** A, double* b, int n);
