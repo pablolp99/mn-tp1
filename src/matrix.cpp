@@ -176,3 +176,40 @@ double* LU_resolver(double** L, double** U, double* b, int n) {
 
     return upper_triangular_system_solver(U, y, n);
 }
+
+double interpolate(double x_0, double y_0, double x_1, double y_1, double y_2){
+    return (( y_1 - y_2 ) * x_0 + (y_2 - y_0) * x_1) / (y_1 - y_0);
+}
+
+double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double isotherm) {
+    int size = n;
+    double** x_int = create_2d_array(n, 2);
+
+    // For each angle, we look for a j that:
+    //     - r_j >= 500
+    //     - r_j+1 < 500
+    // Then we interpolate the radius for
+    // the given angle and j value
+    for (int i = 0; i < n; ++i){
+        // The radius corresponding to this angle are:
+        // n * i
+
+        // m_1 - 2 takes in count the r_i and r_e
+        for (int j = 0; j < m_1-2; ++j){
+            // indexing by radius for each angle
+            if (x[j * n + i] > isotherm && x[(j+1) * n + i] < isotherm ){
+                // Get radius
+                double r_0 = r_i + delta_r * (j + 1);
+                double r_1 = r_i + 2 * delta_r * (j + 1);
+                double temp_0 = x[j * n + i];
+                double temp_1 = x[(j+1) * n + i];
+                x_int[i][0] = interpolate(r_0, temp_0, r_1, temp_1, isotherm);
+                x_int[i][1] = isotherm;
+                break;
+            }
+        }
+    }
+
+
+    return x_int;
+}

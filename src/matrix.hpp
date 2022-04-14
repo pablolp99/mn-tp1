@@ -9,3 +9,5 @@ void gaussian_elimination(double** A, double* b, int n);
 double** LU_factorization(double** A, double* b, int n);
 double* upper_triangular_system_solver(double** A, const double* b, int n);
 double* lower_triangular_system_solver(double** A, const double* b, int n);
+double* LU_resolver(double** L, double** U, double* b, int n);
+double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double isotherm);
