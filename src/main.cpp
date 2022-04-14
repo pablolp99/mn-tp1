@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <stdio.h>
 #include <string>
 
 #include "matrix.hpp"
@@ -11,7 +12,11 @@ using namespace std;
 #define LU 1
 
 int main(int argc, char *argv[]){
-    ifstream infile("/home/pablo/UBA/comp2022/MN/mn-tp1/inputs/example_input.txt");
+    // Read input file
+    FILE * pFile;
+    pFile = fopen (argv[2],"w");
+
+    ifstream infile(argv[1]);
     string line;
 
     int m_1, n, n_inst;
@@ -54,13 +59,10 @@ int main(int argc, char *argv[]){
     for (int instace = 0; instace < n_inst; ++instace){
         // Calculate b vector
         double* b = calculate_b_vector(t_i[instace], t_e[instace], A, r_i, r_e, n, m_1);
-
-        print_vector(b, n * (m_1 - 2));
-
         // Read argv config
         // Triangulate
         double* x;
-        int elimination = stoi(argv[1]);
+        int elimination = stoi(argv[3]);
         if (elimination == GAUSSIAN){
             gaussian_elimination(U, b, temperatures_amount);
             // Calculate vector X
@@ -77,8 +79,7 @@ int main(int argc, char *argv[]){
         // Interpolate results
         double delta_r = (r_e - r_i) / m_1;
         double** result = interpolate_results(x, n, n, m_1, r_i, delta_r, iso);
-        printf("%d\n", instace);
-        print_matrix(result, n, 2);
+        print_matrix(result, n, 2, pFile);
     }
 
     return 0;

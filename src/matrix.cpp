@@ -4,22 +4,14 @@
 #include "matrix.hpp"
 #include "furnace.hpp"
 
-void print_matrix(double** A, int n, int m){
+void print_matrix(double **A, int n, int m, FILE *pFile) {
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < m; ++j){
-            printf("%f ", A[i][j]);
+            fprintf(pFile, "%f ", A[i][j]);
         }
-        printf("\n");
+        fprintf(pFile, "\n");
     }
-    printf("\n");
-}
-
-void print_vector(double* v, int n){
-    for (int i = 0; i < n; ++i){
-        printf("%f ", v[i]);
-        printf("\n");
-    }
-    printf("\n");
+    fprintf(pFile, "\n");
 }
 
 double** create_2d_array(int rows, int cols){
