@@ -145,7 +145,7 @@ double* upper_triangular_system_solver(double** A, const double* b, int n) {
     return x;
 }
 
-double* lower_triangular_system_solver(double** A, const double* b, int n) {
+double* lower_triangular_system_solver(double** A, double* b, int n) {
     auto* x = new double[n];
 
     memset(x, 0, n);
@@ -201,7 +201,6 @@ double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, 
             }
         }
     }
-
 
     return x_int;
 }

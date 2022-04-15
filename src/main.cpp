@@ -70,7 +70,7 @@ int main(int argc, char *argv[]){
             // Calculate vector X
             x = upper_triangular_system_solver(U, b, temperatures_amount);
         } else if (elimination == LU){
-            double** L = LU_factorization(U, b, 12);
+            double** L = LU_factorization(U, b, temperatures_amount);
             // Calculate vector X
             x = LU_resolver(L, U, b, temperatures_amount);
         } else {
