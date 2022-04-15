@@ -191,8 +191,8 @@ double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, 
             // indexing by radius for each angle
             if (x[j * n + i] > isotherm && x[(j+1) * n + i] < isotherm ){
                 // Get radius
-                double r_0 = r_i + delta_r * (j + 1);
-                double r_1 = r_i + 2 * delta_r * (j + 1);
+                double r_0 = r_i + delta_r * (j);
+                double r_1 = r_i + delta_r * (j + 1);
                 double temp_0 = x[j * n + i];
                 double temp_1 = x[(j+1) * n + i];
                 x_int[i][0] = interpolate(r_0, temp_0, r_1, temp_1, isotherm);
