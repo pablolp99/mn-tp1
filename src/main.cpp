@@ -75,9 +75,7 @@ int main(int argc, char *argv[]){
         } else if (elimination == LU){
             double **L;
             if(instance == 0) { //LU factorization has not been calculated
-                // We don't want to change b so we make a copy
-                double* copy_of_b = calculate_b_vector(t_i[instance], t_e[instance], A, r_i, r_e, n, m_1);
-                L = LU_factorization(U, copy_of_b, temperatures_amount);
+                L = LU_factorization(U, temperatures_amount);
             }
             // Calculate vector X
             x = LU_resolver(L, U, b, temperatures_amount);

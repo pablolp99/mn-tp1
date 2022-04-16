@@ -97,7 +97,7 @@ double* calculate_b_vector(double* t_i, double* t_e, double** A, double r_i, dou
 
 // Este metodo realiza una iteracion de la triangulacion (La iteracion i que pone en cero los elementos de la columna
 // i desde la fila i+1 y actualiza el resto)
-double* gaussian_elimination_step(double** A, double* b, int i, int n){
+double* gaussian_elimination_step(double** A, int i, int n){
     // Vector de coeficientes (para posterior uso con la L)
     auto* coefs = new double[n];
     // Seteamos todos los valores iniciales en 0
@@ -109,24 +109,26 @@ double* gaussian_elimination_step(double** A, double* b, int i, int n){
         for (int k = i+1; k < n; ++k) {
             A[j][k] = A[j][k] - coefs[j] * A[i][k];
         }
-        b[j] = b[j] - coefs[j] * b[i];
     }
     return coefs;
 }
 
 void gaussian_elimination(double** A, double* b, int n){
     for (int i = 0; i < n; ++i){
-        gaussian_elimination_step(A, b, i, n);
+        double* coefs = gaussian_elimination_step(A, i, n);
+        for (int j = i+1; j < n; ++j){
+            b[j] = b[j] - coefs[j] * b[i];
+        }
     }
 }
 
-double** LU_factorization(double** A, double* b, int n) {
+double** LU_factorization(double** A, int n) {
     double** L = create_2d_array(n, n);
     double* coef;
 
     for (int i = 0; i < n; ++i){
         // Saves coeficients for L
-        coef = gaussian_elimination_step(A, b, i, n);
+        coef = gaussian_elimination_step(A, i, n);
         L[i][i] = 1;
         for (int j = i+1; j < n; ++j) {
             L[j][i] = coef[j];
