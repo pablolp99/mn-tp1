@@ -14,6 +14,13 @@ void print_matrix(double **A, int n, int m, FILE *pFile) {
     fprintf(pFile, "\n");
 }
 
+void print_vector(double *A, int n) {
+    for (int i = 0; i < n; ++i){
+        printf("%f\n", A[i]);
+    }
+    printf("\n");
+}
+
 double** create_2d_array(int rows, int cols){
     double** M = 0;
     M = new double*[rows];
@@ -45,7 +52,7 @@ double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n){
             v[i-1][j] = calculate_t_jp_k(delta_r, r);
             v[i][j] = calculate_t_ja_k(delta_r, r, delta_theta);
             v[i+1][j] = calculate_t_jn_k(delta_r);
-            v[i][(j-1) % n] = tmp;
+            v[i][(j-1+n) % n] = tmp;
             v[i][(j+1) % n] = tmp;
             // Reshape v to be a vector
             double* reshaped_v = reshape_1d_array(v, size, m_1, n);
@@ -132,7 +139,6 @@ double** LU_factorization(double** A, double* b, int n) {
 double* upper_triangular_system_solver(double** A, const double* b, int n) {
     auto* x = new double[n];
 
-    memset(x, 0, n);
     for (int i = n-1; i >= 0; i--) {
         // x_i = b_i
         x[i] = b[i];
@@ -148,7 +154,6 @@ double* upper_triangular_system_solver(double** A, const double* b, int n) {
 double* lower_triangular_system_solver(double** A, double* b, int n) {
     auto* x = new double[n];
 
-    memset(x, 0, n);
     for (int i = 0; i < n; i++) {
         // x_i = b_i
         x[i] = b[i];
@@ -173,9 +178,9 @@ double interpolate(double x_0, double y_0, double x_1, double y_1, double y_2){
     return (( y_1 - y_2 ) * x_0 + (y_2 - y_0) * x_1) / (y_1 - y_0);
 }
 
-double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double isotherm) {
+double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm) {
     int size = n;
-    double** x_int = create_2d_array(n, 2);
+    double** x_int = create_2d_array(n, 3);
 
     // For each angle, we look for a j that:
     //     - r_j >= 500
@@ -196,7 +201,8 @@ double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, 
                 double temp_0 = x[j * n + i];
                 double temp_1 = x[(j+1) * n + i];
                 x_int[i][0] = interpolate(r_0, temp_0, r_1, temp_1, isotherm);
-                x_int[i][1] = isotherm;
+                x_int[i][1] = i * delta_g;
+                x_int[i][2] = isotherm;
                 break;
             }
         }

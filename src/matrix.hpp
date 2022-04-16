@@ -1,4 +1,5 @@
 void print_matrix(double **A, int n, int m, FILE *pFile);
+void print_vector(double *x, int n);
 double** create_2d_array(int rows, int cols);
 double** calculate_coefficient_matrix(double r_i, double r_e, int m_1, int n);
 double* reshape_1d_array(double** v, int size, int m, int n);
@@ -9,4 +10,4 @@ double** LU_factorization(double** A, double* b, int n);
 double* upper_triangular_system_solver(double** A, const double* b, int n);
 double* lower_triangular_system_solver(double** A, const double* b, int n);
 double* LU_resolver(double** L, double** U, double* b, int n);
-double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double isotherm);
+double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm);

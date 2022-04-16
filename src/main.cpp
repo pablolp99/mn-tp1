@@ -1,8 +1,10 @@
 #include <fstream>
 #include <iostream>
+#include <cmath>
 #include <sstream>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
+#include <chrono>
 
 #include "matrix.hpp"
 
@@ -14,7 +16,7 @@ using namespace std;
 int main(int argc, char *argv[]){
     // Read input file
     FILE * pFile;
-    pFile = fopen (argv[2],"w");
+    pFile = fopen(argv[2],"w");
 
     ifstream infile(argv[1]);
     string line;
@@ -53,13 +55,14 @@ int main(int argc, char *argv[]){
     int temperatures_amount = n * (m_1 - 2);
 
     // The first approach is to use just one instance
-    double** A = calculate_coefficient_matrix(r_i, r_e, m_1, n);
     double** U = calculate_coefficient_matrix(r_i, r_e, m_1, n);
+    double** A = calculate_coefficient_matrix(r_i, r_e, m_1, n);
+    for (int instance = 0; instance < n_inst; ++instance){
+//        printf("Instance %d\n", instance);
+        auto start = std::chrono::high_resolution_clock::now();
 
-    for (int instace = 0; instace < n_inst; ++instace){
-        printf("Instance %d\n", instace);
         // Calculate b vector
-        double* b = calculate_b_vector(t_i[instace], t_e[instace], A, r_i, r_e, n, m_1);
+        double* b = calculate_b_vector(t_i[instance], t_e[instance], A, r_i, r_e, n, m_1);
         // Read argv config
         // Triangulate
         double* x;
@@ -70,18 +73,28 @@ int main(int argc, char *argv[]){
             // Calculate vector X
             x = upper_triangular_system_solver(U, b, temperatures_amount);
         } else if (elimination == LU){
-            double** L = LU_factorization(U, b, temperatures_amount);
+            double **L;
+            if(instance == 0) { //LU factorization has not been calculated
+                L = LU_factorization(U, b, temperatures_amount);
+            }
             // Calculate vector X
             x = LU_resolver(L, U, b, temperatures_amount);
         } else {
             printf("Elimination method not supported. Please choose 0 (Gaussian Elmination) or 1 (LU Factorization)\n");
             return 1;
         }
+        auto stop = std::chrono::high_resolution_clock::now();
 
         // Interpolate results
+        double delta_theta = 2 * M_PI / n;
         double delta_r = (r_e - r_i) / m_1;
-        double** result = interpolate_results(x, n, n, m_1, r_i, delta_r, iso);
-        print_matrix(result, n, 2, pFile);
+        double** result = interpolate_results(x, n, n, m_1, r_i, delta_r, delta_theta, iso);
+        print_matrix(result, n, 3, pFile);
+
+        auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
+
+//        cout <<  << endl;
+        printf("%lu\n", duration.count());
     }
 
     return 0;
