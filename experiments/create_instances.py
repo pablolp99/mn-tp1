@@ -17,4 +17,4 @@ def create_instances(config, fixed_temp=None):
 if __name__ == "__main__":
     # Read config
     conf = yaml.safe_load(Path('config.yml').read_text())
-    create_instances(conf, fixed_temp=175)
+    create_instances(conf, fixed_temp=None)
