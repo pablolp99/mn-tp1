@@ -62,7 +62,7 @@ int main(int argc, char *argv[]){
         auto start = std::chrono::high_resolution_clock::now();
 
         // Calculate b vector
-        double* b = ;
+        double* b = calculate_b_vector(t_i[instance], t_e[instance], A, r_i, r_e, n, m_1);
         // Read argv config
         // Triangulate
         double* x;
