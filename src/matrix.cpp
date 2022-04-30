@@ -196,7 +196,16 @@ double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, 
         // m_1 - 2 takes in count the r_i and r_e
         for (int j = 0; j < m_1-2; ++j){
             // indexing by radius for each angle
-            if (x[j * n + i] > isotherm && x[(j+1) * n + i] < isotherm ){
+            // Revisar como hacer la comparacion correctamente aca
+            if (x[j * n + i] == isotherm){
+                x_int[i][0] = r_i + delta_r * (j);
+                x_int[i][1] = i * delta_g;
+                x_int[i][2] = isotherm;
+            } else if (x[(j + 1) * n + i] == isotherm) {
+                x_int[i][0] = r_i + delta_r * (j + 1);
+                x_int[i][1] = i * delta_g;
+                x_int[i][2] = isotherm;
+            } else if (x[j * n + i] > isotherm && x[(j+1) * n + i] < isotherm ){
                 // Get radius
                 double r_0 = r_i + delta_r * (j);
                 double r_1 = r_i + delta_r * (j + 1);
