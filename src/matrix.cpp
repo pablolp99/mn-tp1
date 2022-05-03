@@ -179,8 +179,11 @@ double* LU_resolver(double** L, double** U, double* b, int n) {
 double interpolate(double x_0, double y_0, double x_1, double y_1, double y_2){
     return (( y_1 - y_2 ) * x_0 + (y_2 - y_0) * x_1) / (y_1 - y_0);
 }
+double calculate_avg(double x_0, double y_0, double x_1, double y_1, double y_2) {
+    return (x_0 + x_1) / 2;
+}
 
-double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm) {
+double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm, double (*method)(double, double, double, double, double)) {
     int size = n;
     double** x_int = create_2d_array(n, 3);
 
@@ -202,7 +205,7 @@ double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, 
                 double r_1 = r_i + delta_r * (j + 1);
                 double temp_0 = x[j * n + i];
                 double temp_1 = x[(j+1) * n + i];
-                x_int[i][0] = interpolate(r_0, temp_0, r_1, temp_1, isotherm);
+                x_int[i][0] = method(r_0, temp_0, r_1, temp_1, isotherm);
                 x_int[i][1] = i * delta_g;
                 x_int[i][2] = isotherm;
                 break;
