@@ -183,7 +183,7 @@ double calculate_avg(double x_0, double y_0, double x_1, double y_1, double y_2)
     return (x_0 + x_1) / 2;
 }
 
-double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm, double (*method)(double, double, double, double, double)) {
+double** calculate_isotherm(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm, double (*method)(double, double, double, double, double)) {
     int size = n;
     double** x_int = create_2d_array(n, 3);
 

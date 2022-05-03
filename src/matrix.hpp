@@ -9,4 +9,6 @@ void gaussian_elimination(double** A, double* b, int n);
 double** LU_factorization(double** A, int n);
 double* upper_triangular_system_solver(double** A, const double* b, int n);
 double* LU_resolver(double** L, double** U, double* b, int n);
-double** interpolate_results(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm);
+double interpolate(double x_0, double y_0, double x_1, double y_1, double y_2);
+double calculate_avg(double x_0, double y_0, double x_1, double y_1, double y_2);
+double** calculate_isotherm(double* x, int x_size, int n, int m_1, double r_i, double delta_r, double delta_g, double isotherm, double (*method)(double, double, double, double, double));

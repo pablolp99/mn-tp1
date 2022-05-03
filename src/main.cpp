@@ -13,6 +13,10 @@ using namespace std;
 #define GAUSSIAN 0
 #define LU 1
 
+#define INTERPOLATION 0
+#define AVG 1
+#define ISOTERM_METHOD INTERPOLATION
+
 int main(int argc, char *argv[]){
     // Read input file
     FILE * pFile;
@@ -88,7 +92,12 @@ int main(int argc, char *argv[]){
         // Interpolate results
         double delta_theta = 2 * M_PI / n;
         double delta_r = (r_e - r_i) / m_1;
-        double** result = interpolate_results(x, n, n, m_1, r_i, delta_r, delta_theta, iso);
+        double** result;
+        if(ISOTERM_METHOD == INTERPOLATION) {
+            result = calculate_isotherm(x, n, n, m_1, r_i, delta_r, delta_theta, iso, &interpolate);
+        } else{
+            result = calculate_isotherm(x, n, n, m_1, r_i, delta_r, delta_theta, iso, &calculate_avg);
+        }
         print_matrix(result, n, 3, pFile);
 
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
